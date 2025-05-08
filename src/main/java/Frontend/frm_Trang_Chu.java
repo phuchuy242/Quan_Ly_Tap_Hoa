@@ -1,5 +1,5 @@
 
-package com.mycompany.phan_mem_quan_ly_tap_hoa;
+package Frontend;
 
 public class frm_Trang_Chu extends javax.swing.JFrame {
 

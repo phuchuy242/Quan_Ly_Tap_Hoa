@@ -1,4 +1,4 @@
-package com.mycompany.phan_mem_quan_ly_tap_hoa;
+package Backend;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
