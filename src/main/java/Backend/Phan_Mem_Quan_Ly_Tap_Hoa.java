@@ -1,4 +1,6 @@
-package com.mycompany.phan_mem_quan_ly_tap_hoa;
+package Backend;
+
+import Frontend.frm_Trang_Chu;
 
 public class Phan_Mem_Quan_Ly_Tap_Hoa {
 

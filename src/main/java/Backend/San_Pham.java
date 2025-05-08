@@ -1,4 +1,6 @@
-package com.mycompany.phan_mem_quan_ly_tap_hoa;
+package Backend;
+
+import Backend.Nha_Cung_Cap;
 
 public class San_Pham {
 
@@ -9,14 +11,10 @@ public class San_Pham {
     private int soLuong;
     private String ngayNhap;
     private String ngayHetHan;
-    private String nhaCungCap;
-
-    // Constructor không tham số
+    private Nha_Cung_Cap nhaCungCap;
     public San_Pham() {
     }
-
-    // Constructor với tham số
-    public San_Pham(String maSP, String tenSP, String loaiSP, double giaBan, int soLuong, String ngayNhap, String ngayHetHan, String nhaCungCap) {
+    public San_Pham(String maSP, String tenSP, String loaiSP, double giaBan, int soLuong, String ngayNhap, String ngayHetHan, Nha_Cung_Cap nhaCungCap) {
         this.maSP = maSP;
         this.tenSP = tenSP;
         this.loaiSP = loaiSP;
@@ -27,7 +25,6 @@ public class San_Pham {
         this.nhaCungCap = nhaCungCap;
     }
 
-    // Getter và Setter
     public String getMaSP() {
         return maSP;
     }
@@ -84,23 +81,11 @@ public class San_Pham {
         this.ngayHetHan = ngayHetHan;
     }
 
-    public String getNhaCungCap() {
+    public Nha_Cung_Cap getNhaCungCap() {
         return nhaCungCap;
     }
 
-    public void setNhaCungCap(String nhaCungCap) {
+    public void setNhaCungCap(Nha_Cung_Cap nhaCungCap) {
         this.nhaCungCap = nhaCungCap;
-    }
-
-    // Phương thức hiển thị thông tin sản phẩm
-    public void displayInfo() {
-        System.out.println("Mã sản phẩm: " + maSP);
-        System.out.println("Tên sản phẩm: " + tenSP);
-        System.out.println("Loại sản phẩm: " + loaiSP);
-        System.out.println("Giá bán: " + giaBan);
-        System.out.println("Số lượng: " + soLuong);
-        System.out.println("Ngày nhập: " + ngayNhap);
-        System.out.println("Ngày hết hạn: " + ngayHetHan);
-        System.out.println("Nhà cung cấp: " + nhaCungCap);
     }
 }
