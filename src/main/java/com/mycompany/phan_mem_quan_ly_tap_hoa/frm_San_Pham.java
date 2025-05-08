@@ -25,7 +25,7 @@ public class frm_San_Pham extends javax.swing.JFrame {
     /**
      * Creates new form frm_Them_Hang_Hoa
      */
-    private String filePath = "D:/MY CODE/JAVA/Phan_Mem_Quan_Ly_Tap_Hoa/data/sanpham.csv";
+    private String filePath = "data/sanpham.csv";
     public frm_San_Pham() {
     setTitle("Kho hang");    
     initComponents();
