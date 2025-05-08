@@ -1,6 +1,6 @@
 package Backend;
 
-import Backend.Nha_Cung_Cap;
+import java.time.LocalDate;
 
 public class San_Pham {
 
@@ -9,22 +9,28 @@ public class San_Pham {
     private String loaiSP;
     private double giaBan;
     private int soLuong;
-    private String ngayNhap;
-    private String ngayHetHan;
+    private LocalDate ngayNhap;
+    private LocalDate ngayHetHan;
     private Nha_Cung_Cap nhaCungCap;
+
+    // Constructor mặc định
     public San_Pham() {
     }
-    public San_Pham(String maSP, String tenSP, String loaiSP, double giaBan, int soLuong, String ngayNhap, String ngayHetHan, Nha_Cung_Cap nhaCungCap) {
-        this.maSP = maSP;
-        this.tenSP = tenSP;
-        this.loaiSP = loaiSP;
-        this.giaBan = giaBan;
-        this.soLuong = soLuong;
-        this.ngayNhap = ngayNhap;
-        this.ngayHetHan = ngayHetHan;
-        this.nhaCungCap = nhaCungCap;
+
+    // Constructor đầy đủ tham số
+    public San_Pham(String maSP, String tenSP, String loaiSP, double giaBan, int soLuong,
+                    LocalDate ngayNhap, LocalDate ngayHetHan, Nha_Cung_Cap nhaCungCap) {
+        this.setMaSP(maSP);
+        this.setTenSP(tenSP);
+        this.setLoaiSP(loaiSP);
+        this.setGiaBan(giaBan);
+        this.setSoLuong(soLuong);
+        this.setNgayNhap(ngayNhap);
+        this.setNgayHetHan(ngayHetHan);
+        this.setNhaCungCap(nhaCungCap);
     }
 
+    // Getter & Setter
     public String getMaSP() {
         return maSP;
     }
@@ -54,6 +60,9 @@ public class San_Pham {
     }
 
     public void setGiaBan(double giaBan) {
+        if (giaBan < 0) {
+            throw new IllegalArgumentException("Giá bán không được âm");
+        }
         this.giaBan = giaBan;
     }
 
@@ -62,22 +71,25 @@ public class San_Pham {
     }
 
     public void setSoLuong(int soLuong) {
+        if (soLuong < 0) {
+            throw new IllegalArgumentException("Số lượng không được âm");
+        }
         this.soLuong = soLuong;
     }
 
-    public String getNgayNhap() {
+    public LocalDate getNgayNhap() {
         return ngayNhap;
     }
 
-    public void setNgayNhap(String ngayNhap) {
+    public void setNgayNhap(LocalDate ngayNhap) {
         this.ngayNhap = ngayNhap;
     }
 
-    public String getNgayHetHan() {
+    public LocalDate getNgayHetHan() {
         return ngayHetHan;
     }
 
-    public void setNgayHetHan(String ngayHetHan) {
+    public void setNgayHetHan(LocalDate ngayHetHan) {
         this.ngayHetHan = ngayHetHan;
     }
 
@@ -88,4 +100,5 @@ public class San_Pham {
     public void setNhaCungCap(Nha_Cung_Cap nhaCungCap) {
         this.nhaCungCap = nhaCungCap;
     }
+    
 }

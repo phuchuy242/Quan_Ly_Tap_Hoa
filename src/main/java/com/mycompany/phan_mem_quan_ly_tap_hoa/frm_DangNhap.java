@@ -2,7 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package Frontend;
+package com.mycompany.phan_mem_quan_ly_tap_hoa;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
+
 
 /**
  *
@@ -102,12 +111,61 @@ public class frm_DangNhap extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    // Lấy tên đăng nhập và mật khẩu từ các trường nhập liệu
+    String username = jTextField1.getText();
+    String password = new String(jPasswordField1.getPassword());
 
-    /**
-     * @param args the command line arguments
-     */
+    // Kiểm tra thông tin đăng nhập
+    if (isAuthenticated(username, password)) {
+        // Nếu đăng nhập thành công, chuyển sang màn hình chính
+        System.out.println("Đăng nhập thành công!");
+        
+        // Mở cửa sổ trang chủ
+//        frm_Trang_Chu trangChu = new frm_Trang_Chu();
+//        trangChu.setVisible(true);
+
+        // Ẩn cửa sổ đăng nhập
+        this.setVisible(false);
+    } else {
+        // Nếu đăng nhập không thành công, thông báo lỗi
+        javax.swing.JOptionPane.showMessageDialog(this, "Sai tên đăng nhập hoặc mật khẩu.");
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+private boolean isAuthenticated(String username, String password) {
+    try {
+        // Đọc dữ liệu từ file CSV và kiểm tra đăng nhập
+        List<String[]> users = readCSV("D:\\MY CODE\\JAVA\\Phan_Mem_Quan_Ly_Tap_Hoa\\data\\Account.csv");
+
+        for (String[] user : users) {
+            if (user[0].equals(username) && user[1].equals(password)) {
+                return true;  // Tìm thấy tài khoản và mật khẩu trùng khớp
+            }
+        }
+    } catch (IOException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Lỗi khi đọc file dữ liệu.");
+        e.printStackTrace();
+    }
+    return false;  // Không tìm thấy tài khoản/mật khẩu đúng
+}
+public static List<String[]> readCSV(String fileName) throws IOException {
+    CSVReader reader = new CSVReader(new FileReader(fileName));
+    List<String[]> users = new ArrayList<>();
+    
+    String[] nextLine;
+    try {
+        while ((nextLine = reader.readNext()) != null) {
+            users.add(nextLine);
+        }
+    } catch (CsvValidationException e) {
+        javax.swing.JOptionPane.showMessageDialog(null, "Lỗi khi đọc file CSV.");
+        e.printStackTrace();
+    } finally {
+        reader.close();
+    }
+    
+    return users;
+}
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
