@@ -1,5 +1,4 @@
-package Backend;
-
+import Backend.Nha_Cung_Cap;
 import java.time.LocalDate;
 
 public class San_Pham {
@@ -13,24 +12,22 @@ public class San_Pham {
     private LocalDate ngayHetHan;
     private Nha_Cung_Cap nhaCungCap;
 
-    // Constructor mặc định
     public San_Pham() {
     }
 
-    // Constructor đầy đủ tham số
-    public San_Pham(String maSP, String tenSP, String loaiSP, double giaBan, int soLuong,
-                    LocalDate ngayNhap, LocalDate ngayHetHan, Nha_Cung_Cap nhaCungCap) {
-        this.setMaSP(maSP);
-        this.setTenSP(tenSP);
-        this.setLoaiSP(loaiSP);
-        this.setGiaBan(giaBan);
-        this.setSoLuong(soLuong);
-        this.setNgayNhap(ngayNhap);
-        this.setNgayHetHan(ngayHetHan);
-        this.setNhaCungCap(nhaCungCap);
+    public San_Pham(String maSP, String tenSP, String loaiSP, double giaBan, int soLuong, LocalDate ngayNhap, LocalDate ngayHetHan, Nha_Cung_Cap nhaCungCap) {
+        this.maSP = maSP;
+        this.tenSP = tenSP;
+        this.loaiSP = loaiSP;
+        this.giaBan = giaBan;
+        this.soLuong = soLuong;
+        this.ngayNhap = ngayNhap;
+        this.ngayHetHan = ngayHetHan;
+        this.nhaCungCap = nhaCungCap;
     }
 
     // Getter & Setter
+
     public String getMaSP() {
         return maSP;
     }
@@ -100,5 +97,13 @@ public class San_Pham {
     public void setNhaCungCap(Nha_Cung_Cap nhaCungCap) {
         this.nhaCungCap = nhaCungCap;
     }
-    
+
+    // Phương thức hiển thị thông tin sản phẩm
+    @Override
+    public String toString() {
+        return "Mã SP: " + maSP + ", Tên SP: " + tenSP + ", Loại SP: " + loaiSP +
+               ", Giá bán: " + giaBan + ", Số lượng: " + soLuong + 
+               ", Ngày nhập: " + ngayNhap + ", Ngày hết hạn: " + ngayHetHan + 
+               ", Nhà cung cấp: " + (nhaCungCap != null ? nhaCungCap.getTenNCC() : "Chưa có nhà cung cấp");
+    }
 }

@@ -314,7 +314,7 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
 
     // Kiểm tra trường dữ liệu có trống không
     if (maSP.isEmpty() || tenSP.isEmpty() || giaBan.isEmpty() || soLuong.isEmpty() || ngayNhap.isEmpty() || ngayHetHan.isEmpty() || nhaCC.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "❌ Vui lòng điền đầy đủ thông tin sản phẩm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, " Vui lòng điền đầy đủ thông tin sản phẩm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
@@ -329,13 +329,13 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
 
         // Kiểm tra ngày nhập >= ngày hiện tại
         if (dateNhap.before(dateNow)) {
-            JOptionPane.showMessageDialog(this, "❌ Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         // Kiểm tra ngày hết hạn > ngày nhập
         if (!dateHetHan.after(dateNhap)) {
-            JOptionPane.showMessageDialog(this, "❌ Ngày hết hạn phải lớn hơn ngày nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ngày hết hạn phải lớn hơn ngày nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -355,7 +355,7 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
         jTextField8.setText("");
 
     } catch (ParseException e) {
-        JOptionPane.showMessageDialog(this, "❌ Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 

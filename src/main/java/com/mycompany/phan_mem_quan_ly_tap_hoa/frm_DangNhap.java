@@ -121,8 +121,8 @@ public class frm_DangNhap extends javax.swing.JFrame {
         System.out.println("Đăng nhập thành công!");
         
         // Mở cửa sổ trang chủ
-//        frm_Trang_Chu trangChu = new frm_Trang_Chu();
-//        trangChu.setVisible(true);
+        frm_Trang_Chu trangChu = new frm_Trang_Chu();
+        trangChu.setVisible(true);
 
         // Ẩn cửa sổ đăng nhập
         this.setVisible(false);
@@ -138,7 +138,7 @@ private boolean isAuthenticated(String username, String password) {
 
         for (String[] user : users) {
             if (user[0].equals(username) && user[1].equals(password)) {
-                return true;  // Tìm thấy tài khoản và mật khẩu trùng khớp
+                return true;
             }
         }
     } catch (IOException e) {
