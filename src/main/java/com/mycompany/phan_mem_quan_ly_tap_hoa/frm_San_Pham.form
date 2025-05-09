@@ -228,9 +228,9 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="3">
-                <StringItem index="0" value="Do an"/>
-                <StringItem index="1" value="Nuoc uong"/>
-                <StringItem index="2" value="Gia dung"/>
+                <StringItem index="0" value="&#x110;&#x1ed3; &#x103;n"/>
+                <StringItem index="1" value="N&#x1b0;&#x1edb;c u&#x1ed1;ng"/>
+                <StringItem index="2" value="Gia d&#x1ee5;ng"/>
               </StringArray>
             </Property>
           </Properties>

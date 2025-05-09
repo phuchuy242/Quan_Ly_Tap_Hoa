@@ -62,20 +62,30 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 400, -1, -1));
 
         jButton3.setText("Quản Lý Hóa Đơn");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 400, -1, -1));
 
         jButton4.setText("Quản Lý Thống Kê");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 630, -1, -1));
 
         jButton5.setText("Quản Lý");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 630, -1, -1));
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 630, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tải xuống2.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 210, 170));
 
         jButton6.setText("Nhà Cung Cấp");
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 630, -1, -1));
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 630, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/images.11jpg.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
@@ -117,6 +127,16 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         myForm.setVisible(true);
         myForm.setLocationRelativeTo(null);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        frm_Hoa_Don myForm = new frm_Hoa_Don();
+        myForm.setVisible(true);
+        myForm.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

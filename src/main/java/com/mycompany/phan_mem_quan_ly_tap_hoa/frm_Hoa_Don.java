@@ -4,6 +4,15 @@
  */
 package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +26,27 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
     public frm_Hoa_Don() {
         initComponents();
         setLocationRelativeTo(this);
+        loadDataFromCSV();
     }
+
+    private void loadDataFromCSV() {
+    try (BufferedReader reader = new BufferedReader(
+            new InputStreamReader(new FileInputStream("data/sanpham.csv"), "UTF-8"))) {
+
+        String line;
+        DefaultTableModel model = (DefaultTableModel) tblTatCa.getModel();
+        model.setRowCount(0);  // Làm sạch bảng trước khi thêm dữ liệu mới
+
+        while ((line = reader.readLine()) != null) {
+            String[] data = line.split(",");
+            model.addRow(data); // Thêm dữ liệu vào bảng
+        }
+
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Lỗi khi đọc file CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,10 +61,6 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         tblThucDon = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTatCa = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblDoAn = new javax.swing.JTable();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tblNuocUong = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -52,7 +77,12 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblHoaDon = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        txtTongTien = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBoxphuongThucThanhToan = new javax.swing.JComboBox<>();
         btnThanhToan = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,62 +117,6 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblTatCa);
 
         tblThucDon.addTab("Giỏ Hàng", jScrollPane1);
-
-        tblDoAn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Mã món", "Tên món", "Đơn vị tính", "Giá bán", "Số lượng"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tblDoAn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblDoAnMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(tblDoAn);
-
-        tblThucDon.addTab("", jScrollPane2);
-
-        tblNuocUong.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Mã món", "Tên món", "Đơn vị tính", "Giá bán", "Số lượng"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tblNuocUong.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblNuocUongMouseClicked(evt);
-            }
-        });
-        jScrollPane3.setViewportView(tblNuocUong);
-
-        tblThucDon.addTab("", jScrollPane3);
 
         jLabel1.setText("Tên sản phẩm :");
 
@@ -224,8 +198,7 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
                                 .addComponent(txtTimSanPham)
                                 .addGap(30, 30, 30)
                                 .addComponent(btnThemMon)
-                                .addGap(0, 6, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
+                                .addGap(0, 87, Short.MAX_VALUE)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnXoaSanPham)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -235,7 +208,7 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tblThucDon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,24 +236,32 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTimSanPham)
                     .addComponent(btnThemMon)
-                    .addComponent(btnXoaSanPham))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnXoaSanPham)))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Mã món", "Tên món", "Giá tiền", "Số lượng", "Thành tiền"
             }
         ));
         jScrollPane4.setViewportView(tblHoaDon);
+
+        jLabel3.setText("Tổng tiền:");
+
+        txtTongTien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTongTienActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Phương thức thanh toán");
+
+        jComboBoxphuongThucThanhToan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiền Mặt", "Chuyển Khoản" }));
 
         btnThanhToan.setText("Thanh Toán");
         btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
@@ -294,21 +275,41 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnThanhToan, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtTongTien)
+                            .addComponent(jComboBoxphuongThucThanhToan, 0, 154, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnThanhToan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxphuongThucThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnThanhToan)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jButton1.setText("Trở về");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -316,21 +317,24 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
@@ -340,47 +344,67 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtThanhTienActionPerformed
 
+    private void updateTotalAmount() {
+    int totalAmount = 0;
+    DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel(); // Lấy dữ liệu bảng giỏ hàng
+
+    // Duyệt qua từng hàng trong bảng giỏ hàng và tính tổng tiền
+    for (int i = 0; i < model.getRowCount(); i++) {
+        totalAmount += (int) model.getValueAt(i, 4); // Cột Thành tiền
+    }
+
+    // Cập nhật tổng tiền vào ô txtTongTien
+    txtTongTien.setText(String.valueOf(totalAmount));
+}
     private void btnThemMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemMonActionPerformed
-         String maMon = txtMaMon.getText();
-        String giaTienStr = txtGiaTien.getText();
-        String soLuongStr = txtSoLuong.getText();
+        String maMon = txtMaMon1.getText(); // Lấy mã sản phẩm từ ô nhập
+    String giaTienStr = txtGiaTien.getText(); // Lấy giá tiền từ ô nhập
+    String soLuongStr = txtSoLuong.getText(); // Lấy số lượng từ ô nhập
 
-        // Kiểm tra đầu vào
-        if (maMon.isEmpty() || giaTienStr.isEmpty() || soLuongStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
+    if (maMon.isEmpty() || giaTienStr.isEmpty() || soLuongStr.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return; // Nếu không đủ thông tin, dừng lại
+    }
+
+    try {
+        int giaTien = Integer.parseInt(giaTienStr); // Chuyển giá tiền thành số nguyên
+        int soLuong = Integer.parseInt(soLuongStr); // Chuyển số lượng thành số nguyên
+        int thanhTien = giaTien * soLuong; // Tính thành tiền
+
+        DefaultTableModel modelTatCa = (DefaultTableModel) tblTatCa.getModel(); // Lấy model của bảng tất cả sản phẩm
+        String tenMon = ""; // Tạo biến lưu tên món
+
+        // Duyệt qua tất cả các hàng trong bảng tblTatCa để tìm tên món tương ứng với mã sản phẩm
+        for (int i = 0; i < modelTatCa.getRowCount(); i++) {
+            String maMonTrongBang = modelTatCa.getValueAt(i, 0).toString(); // Lấy mã sản phẩm trong bảng
+            if (maMonTrongBang.equals(maMon)) {
+                tenMon = modelTatCa.getValueAt(i, 1).toString(); // Lấy tên món từ bảng tblTatCa
+                break; // Dừng vòng lặp khi đã tìm thấy món
+            }
         }
 
-        try {
-            int giaTien = Integer.parseInt(giaTienStr);
-            int soLuong = Integer.parseInt(soLuongStr);
-            int thanhTien = giaTien * soLuong;
+        // Thêm sản phẩm vào giỏ hàng (bảng tblHoaDon)
+        DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+        modelHoaDon.addRow(new Object[]{maMon, tenMon, giaTien, soLuong, thanhTien});
 
-            // Thêm sản phẩm vào bảng giỏ hàng
-            DefaultTableModel model = (DefaultTableModel) tblTatCa.getModel();
-            model.addRow(new Object[]{maMon, "Tên món", giaTien, giaTien, soLuong, thanhTien});
+        // Cập nhật tổng tiền vào ô txtTongTien
+        updateTotalAmount(); // Gọi phương thức cập nhật tổng tiền
 
-            // Làm mới các trường nhập liệu
-            txtMaMon.setText("");
-            txtGiaTien.setText("");
-            txtSoLuong.setText("");
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Giá tiền và số lượng phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+        // Làm mới các trường nhập liệu sau khi thêm món
+        txtMaMon1.setText("");
+        txtGiaTien.setText("");
+        txtSoLuong.setText("");
+        txtThanhTien.setText("");
+
+        // Cập nhật lại bảng sản phẩm để phản ánh các thay đổi sau khi thêm sản phẩm mới
+        loadDataFromCSV(); // Hoặc nếu không sử dụng file CSV, bạn có thể làm mới bảng theo cách khác
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Giá tiền và số lượng phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnThemMonActionPerformed
 
-    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-         int totalAmount = 0;
-    DefaultTableModel model = (DefaultTableModel) tblTatCa.getModel();
-    for (int i = 0; i < model.getRowCount(); i++) {
-        totalAmount += (int) model.getValueAt(i, 5); // Cột Thành tiền
-    }
-    
-    JOptionPane.showMessageDialog(this, "Tổng tiền: " + totalAmount + " VND", "Thanh toán thành công", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_btnThanhToanActionPerformed
-
     private void txtMaMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaMonActionPerformed
-       
+
     }//GEN-LAST:event_txtMaMonActionPerformed
 
     private void txtMaMon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaMon1ActionPerformed
@@ -388,31 +412,137 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMaMon1ActionPerformed
 
     private void txtTimSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimSanPhamActionPerformed
-        // TODO add your handling code here:
+        String searchTerm = txtMaMon.getText().toLowerCase().trim(); // Lấy từ khóa tìm kiếm từ ô nhập mã sản phẩm
+    if (searchTerm.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã hoặc tên sản phẩm để tìm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return; // Dừng lại nếu không nhập gì vào ô tìm kiếm
+    }
+
+    DefaultTableModel model = (DefaultTableModel) tblTatCa.getModel();
+    DefaultTableModel newModel = new DefaultTableModel(new Object[]{"Mã sản phẩm", "Tên sản phẩm", "Loại sản phẩm", "Giá bán", "Số lượng", "Ngày nhập", "Ngày hết hạn"}, 0);
+    boolean found = false;
+
+    // Tìm kiếm sản phẩm trong bảng tblTatCa
+    for (int i = 0; i < model.getRowCount(); i++) {
+        String maMon = model.getValueAt(i, 0).toString().toLowerCase();
+        String tenMon = model.getValueAt(i, 1).toString().toLowerCase();
+
+        // Kiểm tra xem mã sản phẩm hoặc tên sản phẩm có chứa từ khóa tìm kiếm không
+        if (maMon.contains(searchTerm) || tenMon.contains(searchTerm)) {
+            // Thêm sản phẩm vào bảng tìm kiếm mới
+            newModel.addRow(new Object[]{
+                model.getValueAt(i, 0), // Mã sản phẩm
+                model.getValueAt(i, 1), // Tên sản phẩm
+                model.getValueAt(i, 2), // Loại sản phẩm
+                model.getValueAt(i, 3), // Giá bán
+                model.getValueAt(i, 4), // Số lượng
+                model.getValueAt(i, 5), // Ngày nhập
+                model.getValueAt(i, 6) // Ngày hết hạn
+            });
+            found = true;
+
+            // Điền thông tin sản phẩm vào các ô nhập liệu
+            txtMaMon1.setText(model.getValueAt(i, 0).toString());  // Mã sản phẩm
+            txtGiaTien.setText(model.getValueAt(i, 3).toString());  // Giá tiền
+            txtSoLuong.setText(model.getValueAt(i, 4).toString());  // Số lượng
+            int giaTien = Integer.parseInt(model.getValueAt(i, 3).toString());
+            int soLuong = Integer.parseInt(model.getValueAt(i, 4).toString());
+            txtThanhTien.setText(String.valueOf(giaTien * soLuong));  // Tính thành tiền
+            break;  // Dừng lại khi tìm thấy sản phẩm
+        }
+    }
+
+    // Cập nhật bảng tblTatCa với dữ liệu đã tìm kiếm
+    tblTatCa.setModel(newModel);
+
+    // Nếu không tìm thấy sản phẩm, hiển thị thông báo
+    if (!found) {
+        JOptionPane.showMessageDialog(this, "Sản phẩm không tìm thấy!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_txtTimSanPhamActionPerformed
 
     private void btnXoaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaSanPhamActionPerformed
-       int row = tblTatCa.getSelectedRow();
-    if (row != -1) {
-        DefaultTableModel model = (DefaultTableModel) tblTatCa.getModel();
-        model.removeRow(row);
-    } else {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
+        int row = tblHoaDon.getSelectedRow();
+        if (row != -1) {
+            DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+            model.removeRow(row);
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+
 
     }//GEN-LAST:event_btnXoaSanPhamActionPerformed
 
-    private void tblNuocUongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNuocUongMouseClicked
+    private void txtTongTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTongTienActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tblNuocUongMouseClicked
-
-    private void tblDoAnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDoAnMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tblDoAnMouseClicked
+    }//GEN-LAST:event_txtTongTienActionPerformed
 
     private void tblTatCaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTatCaMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tblTatCaMouseClicked
+
+    private void updateCSVFile(DefaultTableModel modelTatCa) {
+    try (BufferedWriter writer = new BufferedWriter(
+            new OutputStreamWriter(new FileOutputStream("data/sanpham.csv"), "UTF-8"))) {
+
+        for (int i = 0; i < modelTatCa.getRowCount(); i++) {
+            String maMon = modelTatCa.getValueAt(i, 0).toString();
+            String tenMon = modelTatCa.getValueAt(i, 1).toString();
+            String loaiMon = modelTatCa.getValueAt(i, 2).toString();
+            String giaTien = modelTatCa.getValueAt(i, 3).toString();
+            String soLuong = modelTatCa.getValueAt(i, 4).toString();
+            String ngayNhap = modelTatCa.getValueAt(i, 5).toString();
+            String ngayHetHan = modelTatCa.getValueAt(i, 6).toString();
+
+            writer.write(maMon + "," + tenMon + "," + loaiMon + "," + giaTien + "," + soLuong + "," + ngayNhap + "," + ngayHetHan);
+            writer.newLine(); // Xuống dòng
+        }
+
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Lỗi khi ghi vào tệp CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
+        // Duyệt qua từng dòng trong giỏ hàng để cập nhật lại số lượng
+    DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+    DefaultTableModel modelTatCa = (DefaultTableModel) tblTatCa.getModel();
+
+    // Duyệt qua tất cả các món trong giỏ hàng
+    for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
+        String maMon = modelHoaDon.getValueAt(i, 0).toString();
+        int soLuong = Integer.parseInt(modelHoaDon.getValueAt(i, 3).toString()); // Số lượng trong giỏ hàng
+
+        // Cập nhật số lượng trong bảng tblTatCa (cập nhật dữ liệu trong bảng sản phẩm)
+        for (int j = 0; j < modelTatCa.getRowCount(); j++) {
+            String maMonTrongBang = modelTatCa.getValueAt(j, 0).toString();
+            int soLuongTrongBang = Integer.parseInt(modelTatCa.getValueAt(j, 4).toString());
+
+            // Nếu tìm thấy sản phẩm trong bảng tblTatCa
+            if (maMonTrongBang.equals(maMon)) {
+    int soLuongMoi = soLuongTrongBang - soLuong;
+
+    if (soLuongMoi <= 0) {
+        modelTatCa.removeRow(j); // Xóa dòng nếu hết hàng
+        j--; // Giảm chỉ số để tránh bỏ qua dòng kế tiếp sau khi xóa
+    } else {
+        modelTatCa.setValueAt(soLuongMoi, j, 4); // Cập nhật lại số lượng nếu còn
+    }
+    break;
+}
+        }
+    }
+
+    // Cập nhật lại tệp CSV với số lượng mới sau khi thanh toán
+    updateCSVFile(modelTatCa);
+
+    // Hiển thị thông báo thành công
+    JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+    // Làm mới giỏ hàng sau khi thanh toán
+    modelHoaDon.setRowCount(0); // Xóa tất cả các món trong giỏ hàng
+    updateTotalAmount(); // Cập nhật lại tổng tiền giỏ hàng
+    }//GEN-LAST:event_btnThanhToanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -440,6 +570,13 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(frm_Hoa_Don.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -453,20 +590,20 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnThemMon;
     private javax.swing.JButton btnXoaSanPham;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBoxphuongThucThanhToan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable tblDoAn;
     private javax.swing.JTable tblHoaDon;
-    private javax.swing.JTable tblNuocUong;
     private javax.swing.JTable tblTatCa;
     private javax.swing.JTabbedPane tblThucDon;
     private javax.swing.JTextField txtGiaTien;
@@ -475,5 +612,6 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
     private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtThanhTien;
     private javax.swing.JButton txtTimSanPham;
+    private javax.swing.JTextField txtTongTien;
     // End of variables declaration//GEN-END:variables
 }

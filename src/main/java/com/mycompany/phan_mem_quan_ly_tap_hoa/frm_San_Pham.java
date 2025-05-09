@@ -6,9 +6,13 @@ package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -127,7 +131,7 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Do an", "Nuoc uong", "Gia dung" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đồ ăn", "Nước uống", "Gia dụng" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -437,7 +441,8 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
     }
 }
     private void loadFromCSV() {
-    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    try (BufferedReader br = new BufferedReader(
+            new InputStreamReader(new FileInputStream(filePath), "UTF-8"))) {
         String line;
         while ((line = br.readLine()) != null) {
             String[] data = line.split(",");
@@ -448,12 +453,15 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
             danhSachSanPham.add(row);
         }
     } catch (IOException e) {
-        e.printStackTrace(); // In lỗi nếu không mở được file
+        e.printStackTrace();
     }
     loadTable();
 }
+
     private void saveToCSV() {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+    try (BufferedWriter bw = new BufferedWriter(
+            new OutputStreamWriter(new FileOutputStream(filePath), "UTF-8"))) {
+        
         for (Object[] row : danhSachSanPham) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < row.length; i++) {
@@ -466,9 +474,10 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
             bw.newLine();
         }
     } catch (IOException e) {
-        e.printStackTrace(); // In lỗi nếu không thể lưu
+        e.printStackTrace();
     }
 }
+
 
 
     
