@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 //private String filePath = "data/sanpham.csv";
@@ -262,6 +263,11 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         jLabel8.setText("Phương thức thanh toán");
 
         jComboBoxphuongThucThanhToan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiền Mặt", "Chuyển Khoản" }));
+        jComboBoxphuongThucThanhToan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxphuongThucThanhToanActionPerformed(evt);
+            }
+        });
 
         btnThanhToan.setText("Thanh Toán");
         btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
@@ -310,6 +316,11 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
         );
 
         jButton1.setText("Trở về");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -343,7 +354,13 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
     private void txtThanhTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtThanhTienActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtThanhTienActionPerformed
-
+    private int getTongTien() {
+        try {
+            return Integer.parseInt(txtTongTien.getText());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
     private void updateTotalAmount() {
     int totalAmount = 0;
     DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel(); // Lấy dữ liệu bảng giỏ hàng
@@ -504,45 +521,109 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
 }
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-        // Duyệt qua từng dòng trong giỏ hàng để cập nhật lại số lượng
+            if (jComboBoxphuongThucThanhToan.getSelectedIndex() == -1) {
+    JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+    return;
+}
+
+String phuongThuc = jComboBoxphuongThucThanhToan.getSelectedItem().toString();
+
+// Nếu phương thức thanh toán là "Chuyển khoản"
+if (phuongThuc.equalsIgnoreCase("Chuyển khoản")) {
+    int tongTien = 0;
+    try {
+        tongTien = Integer.parseInt(txtTongTien.getText().trim()); // Lấy tiền từ ô txtTongTien
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Không thể lấy tổng tiền!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String noiDung = "Thanh Toan " + System.currentTimeMillis();
+
+    // Tạo form QRCodeViewer và hiển thị mã QR
+    QRCodeViewer qrViewer = new QRCodeViewer(tongTien, noiDung, new QRCodeViewer.QRPaymentCallback() {
+        @Override
+        public void onPaymentCompleted() {
+            xuLyThanhToanSauKhiChuyenKhoan();
+        }
+    });
+}
+
+// Tiếp tục xử lý thanh toán cho các phương thức khác (ví dụ như "Tiền mặt")
+DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+DefaultTableModel modelTatCa = (DefaultTableModel) tblTatCa.getModel();
+
+for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
+    String maMon = modelHoaDon.getValueAt(i, 0).toString();
+    int soLuong = Integer.parseInt(modelHoaDon.getValueAt(i, 3).toString());
+
+    for (int j = 0; j < modelTatCa.getRowCount(); j++) {
+        String maMonTrongBang = modelTatCa.getValueAt(j, 0).toString();
+        int soLuongTrongBang = Integer.parseInt(modelTatCa.getValueAt(j, 4).toString());
+
+        if (maMon.equals(maMonTrongBang)) {
+            int soLuongMoi = soLuongTrongBang - soLuong;
+            if (soLuongMoi <= 0) {
+                modelTatCa.removeRow(j);
+                j--;
+            } else {
+                modelTatCa.setValueAt(soLuongMoi, j, 4);
+            }
+            break;
+        }
+    }
+}
+
+// Cập nhật file CSV
+updateCSVFile(modelTatCa);
+
+// Chỉ hiển thị thông báo "Thanh toán thành công!" nếu phương thức thanh toán là "Tiền mặt"
+if (phuongThuc.equalsIgnoreCase("Tiền mặt")) {
+    JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+}
+
+modelHoaDon.setRowCount(0); // Xóa giỏ hàng
+updateTotalAmount(); // Cập nhật lại tổng tiền
+    }//GEN-LAST:event_btnThanhToanActionPerformed
+    private void xuLyThanhToanSauKhiChuyenKhoan() {
     DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
     DefaultTableModel modelTatCa = (DefaultTableModel) tblTatCa.getModel();
 
-    // Duyệt qua tất cả các món trong giỏ hàng
     for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
         String maMon = modelHoaDon.getValueAt(i, 0).toString();
-        int soLuong = Integer.parseInt(modelHoaDon.getValueAt(i, 3).toString()); // Số lượng trong giỏ hàng
+        int soLuong = Integer.parseInt(modelHoaDon.getValueAt(i, 3).toString());
 
-        // Cập nhật số lượng trong bảng tblTatCa (cập nhật dữ liệu trong bảng sản phẩm)
         for (int j = 0; j < modelTatCa.getRowCount(); j++) {
             String maMonTrongBang = modelTatCa.getValueAt(j, 0).toString();
             int soLuongTrongBang = Integer.parseInt(modelTatCa.getValueAt(j, 4).toString());
 
-            // Nếu tìm thấy sản phẩm trong bảng tblTatCa
-            if (maMonTrongBang.equals(maMon)) {
-    int soLuongMoi = soLuongTrongBang - soLuong;
-
-    if (soLuongMoi <= 0) {
-        modelTatCa.removeRow(j); // Xóa dòng nếu hết hàng
-        j--; // Giảm chỉ số để tránh bỏ qua dòng kế tiếp sau khi xóa
-    } else {
-        modelTatCa.setValueAt(soLuongMoi, j, 4); // Cập nhật lại số lượng nếu còn
-    }
-    break;
-}
+            if (maMon.equals(maMonTrongBang)) {
+                int soLuongMoi = soLuongTrongBang - soLuong;
+                if (soLuongMoi <= 0) {
+                    modelTatCa.removeRow(j);
+                    j--;
+                } else {
+                    modelTatCa.setValueAt(soLuongMoi, j, 4);
+                }
+                break;
+            }
         }
     }
 
-    // Cập nhật lại tệp CSV với số lượng mới sau khi thanh toán
     updateCSVFile(modelTatCa);
-
-    // Hiển thị thông báo thành công
     JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    modelHoaDon.setRowCount(0); // Xóa giỏ hàng
+    updateTotalAmount(); // Cập nhật lại tổng tiền
+}
 
-    // Làm mới giỏ hàng sau khi thanh toán
-    modelHoaDon.setRowCount(0); // Xóa tất cả các món trong giỏ hàng
-    updateTotalAmount(); // Cập nhật lại tổng tiền giỏ hàng
-    }//GEN-LAST:event_btnThanhToanActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBoxphuongThucThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxphuongThucThanhToanActionPerformed
+         
+    }//GEN-LAST:event_jComboBoxphuongThucThanhToanActionPerformed
 
     /**
      * @param args the command line arguments

@@ -69,13 +69,13 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 400, -1, -1));
 
-        jButton4.setText("Quản Lý Thống Kê");
+        jButton4.setText("Thống kê");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 630, -1, -1));
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 630, -1, -1));
 
         jButton5.setText("Quản Lý");
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 630, -1, -1));
