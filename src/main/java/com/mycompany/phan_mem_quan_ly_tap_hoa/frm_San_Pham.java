@@ -331,11 +331,10 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
         Date dateNhap = sdf.parse(ngayNhap);
         Date dateHetHan = sdf.parse(ngayHetHan);
 
-        // Kiểm tra ngày nhập >= ngày hiện tại
-        if (dateNhap.before(dateNow)) {
-            JOptionPane.showMessageDialog(this, "Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if (dateNhap.after(dateNow)) {
+            JOptionPane.showMessageDialog(this, "Ngày nhập phải nhỏ hơn hoặc bằng ngày hiện tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+}
 
         // Kiểm tra ngày hết hạn > ngày nhập
         if (!dateHetHan.after(dateNhap)) {
