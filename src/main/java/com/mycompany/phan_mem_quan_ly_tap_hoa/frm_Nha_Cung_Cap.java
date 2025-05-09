@@ -17,10 +17,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-public class Nha_Cung_CapFrame extends javax.swing.JFrame {
+public class frm_Nha_Cung_Cap extends javax.swing.JFrame {
      private String currentAction = "";
 
-    public Nha_Cung_CapFrame() {
+    public frm_Nha_Cung_Cap() {
         initComponents();
         loadTableFromCSV("data/nhacungcap.csv");
 
@@ -259,8 +259,10 @@ public class Nha_Cung_CapFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       setVisible(false);
-        dispose();
+       frm_Trang_Chu trangChuForm = new frm_Trang_Chu();  // Tạo lại frm_Trang_Chu
+        trangChuForm.setVisible(true);  // Mở lại frm_Trang_Chu
+        trangChuForm.setLocationRelativeTo(null);  // Đặt cửa sổ mới ở giữa màn hình
+        this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -409,7 +411,7 @@ try {
        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Nha_Cung_CapFrame().setVisible(true);
+                new frm_Nha_Cung_Cap().setVisible(true);
             }
         });
     }

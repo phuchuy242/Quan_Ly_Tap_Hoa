@@ -6,6 +6,7 @@ package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -13,6 +14,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -45,6 +48,49 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
 
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Lỗi khi đọc file CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    private void saveInvoiceToCSV() {
+    // Lấy dữ liệu từ bảng hóa đơn
+    DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+
+    // Đường dẫn tới file hóa đơn chung (file đã tồn tại)
+    String filename = "data/hoadon.csv";
+
+    // Lấy thời gian hiện tại để thêm vào đầu file
+    String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+
+    try (BufferedWriter writer = new BufferedWriter(
+            new OutputStreamWriter(new FileOutputStream(filename, true), "UTF-8"))) { // true để append dữ liệu vào cuối file
+
+        // Kiểm tra xem file có tồn tại và nếu không thì ghi tiêu đề cột
+        File file = new File(filename);
+        if (file.length() == 0) {
+            // Ghi tiêu đề cột nếu file rỗng (lần đầu tiên ghi vào file)
+            writer.write("Ngày giờ xuất hóa đơn,Mã món,Tên món,Giá tiền,Số lượng,Thành tiền");
+            writer.newLine();
+        }
+
+        // Duyệt qua từng hàng trong bảng hóa đơn và ghi vào file CSV
+        for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
+            String maMon = modelHoaDon.getValueAt(i, 0).toString();
+            String tenMon = modelHoaDon.getValueAt(i, 1).toString();
+            String giaTien = modelHoaDon.getValueAt(i, 2).toString();
+            String soLuong = modelHoaDon.getValueAt(i, 3).toString();
+            String thanhTien = modelHoaDon.getValueAt(i, 4).toString();
+
+            // Chỉ lưu những dòng có sản phẩm hợp lệ (ví dụ: Pepsi và Nước rửa chén)
+            if (tenMon.equalsIgnoreCase("Pepsi") || tenMon.equalsIgnoreCase("Nước rửa chén")) {
+                // Ghi thông tin sản phẩm vào file CSV
+                writer.write(currentTime + "," + maMon + "," + tenMon + "," + giaTien + "," + soLuong + "," + thanhTien);
+                writer.newLine();
+            }
+        }
+
+        JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu thành công vào file chung!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn vào file CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
 }
 
@@ -123,7 +169,7 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
 
         jLabel2.setText("Mã sản phẩm :");
 
-        jLabel4.setText("Giá Tiền:");
+        jLabel4.setText("Đơn giá :");
 
         jLabel5.setText("Số lượng:");
 
@@ -177,29 +223,31 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tblThucDon)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel5)))
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5))
                         .addGap(36, 36, 36)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtTimSanPham)
+                                .addGap(30, 30, 30)
+                                .addComponent(btnThemMon)
+                                .addGap(0, 87, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtMaMon, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                                     .addComponent(txtMaMon1)
                                     .addComponent(txtSoLuong, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtTimSanPham)
-                                .addGap(30, 30, 30)
-                                .addComponent(btnThemMon)
-                                .addGap(0, 87, Short.MAX_VALUE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addGap(12, 12, 12))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnXoaSanPham)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -211,15 +259,15 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tblThucDon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtMaMon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtGiaTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtMaMon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtGiaTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtMaMon1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,7 +277,7 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
                             .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
+                        .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(txtThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -580,8 +628,9 @@ updateCSVFile(modelTatCa);
 // Chỉ hiển thị thông báo "Thanh toán thành công!" nếu phương thức thanh toán là "Tiền mặt"
 if (phuongThuc.equalsIgnoreCase("Tiền mặt")) {
     JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+     saveInvoiceToCSV();
 }
-
+;
 modelHoaDon.setRowCount(0); // Xóa giỏ hàng
 updateTotalAmount(); // Cập nhật lại tổng tiền
     }//GEN-LAST:event_btnThanhToanActionPerformed
@@ -612,13 +661,17 @@ updateTotalAmount(); // Cập nhật lại tổng tiền
 
     updateCSVFile(modelTatCa);
     JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    saveInvoiceToCSV();
     modelHoaDon.setRowCount(0); // Xóa giỏ hàng
     updateTotalAmount(); // Cập nhật lại tổng tiền
 }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        setVisible(false);
-        dispose();
+        frm_Trang_Chu trangChuForm = new frm_Trang_Chu();  // Tạo lại frm_Trang_Chu
+        trangChuForm.setVisible(true);  // Mở lại frm_Trang_Chu
+        trangChuForm.setLocationRelativeTo(null);  // Đặt cửa sổ mới ở giữa màn hình
+        this.setVisible(false);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBoxphuongThucThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxphuongThucThanhToanActionPerformed
