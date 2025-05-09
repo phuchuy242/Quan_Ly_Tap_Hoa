@@ -6,9 +6,13 @@ package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -25,7 +29,7 @@ public class frm_San_Pham extends javax.swing.JFrame {
     /**
      * Creates new form frm_Them_Hang_Hoa
      */
-    private String filePath = "D:/MY CODE/JAVA/Phan_Mem_Quan_Ly_Tap_Hoa/data/sanpham.csv";
+    private String filePath = "data/sanpham.csv";
     public frm_San_Pham() {
     setTitle("Kho hang");    
     initComponents();
@@ -127,7 +131,7 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Do an", "Nuoc uong", "Gia dung" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đồ ăn", "Nước uống", "Gia dụng" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -314,7 +318,7 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
 
     // Kiểm tra trường dữ liệu có trống không
     if (maSP.isEmpty() || tenSP.isEmpty() || giaBan.isEmpty() || soLuong.isEmpty() || ngayNhap.isEmpty() || ngayHetHan.isEmpty() || nhaCC.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "❌ Vui lòng điền đầy đủ thông tin sản phẩm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, " Vui lòng điền đầy đủ thông tin sản phẩm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
@@ -329,13 +333,13 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
 
         // Kiểm tra ngày nhập >= ngày hiện tại
         if (dateNhap.before(dateNow)) {
-            JOptionPane.showMessageDialog(this, "❌ Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         // Kiểm tra ngày hết hạn > ngày nhập
         if (!dateHetHan.after(dateNhap)) {
-            JOptionPane.showMessageDialog(this, "❌ Ngày hết hạn phải lớn hơn ngày nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ngày hết hạn phải lớn hơn ngày nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -355,7 +359,7 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
         jTextField8.setText("");
 
     } catch (ParseException e) {
-        JOptionPane.showMessageDialog(this, "❌ Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -437,7 +441,8 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
     }
 }
     private void loadFromCSV() {
-    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    try (BufferedReader br = new BufferedReader(
+            new InputStreamReader(new FileInputStream(filePath), "UTF-8"))) {
         String line;
         while ((line = br.readLine()) != null) {
             String[] data = line.split(",");
@@ -448,12 +453,15 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
             danhSachSanPham.add(row);
         }
     } catch (IOException e) {
-        e.printStackTrace(); // In lỗi nếu không mở được file
+        e.printStackTrace();
     }
     loadTable();
 }
+
     private void saveToCSV() {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+    try (BufferedWriter bw = new BufferedWriter(
+            new OutputStreamWriter(new FileOutputStream(filePath), "UTF-8"))) {
+        
         for (Object[] row : danhSachSanPham) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < row.length; i++) {
@@ -466,9 +474,10 @@ jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
             bw.newLine();
         }
     } catch (IOException e) {
-        e.printStackTrace(); // In lỗi nếu không thể lưu
+        e.printStackTrace();
     }
 }
+
 
 
     
