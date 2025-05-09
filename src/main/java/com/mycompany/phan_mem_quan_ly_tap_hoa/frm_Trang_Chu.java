@@ -85,6 +85,11 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 210, 170));
 
         jButton6.setText("Nhà Cung Cấp");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 630, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/images.11jpg.jpg"))); // NOI18N
@@ -145,6 +150,13 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         myForm.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        frm_Nha_Cung_Cap myForm = new frm_Nha_Cung_Cap();
+        myForm.setVisible(true);
+        myForm.setLocationRelativeTo(null);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
