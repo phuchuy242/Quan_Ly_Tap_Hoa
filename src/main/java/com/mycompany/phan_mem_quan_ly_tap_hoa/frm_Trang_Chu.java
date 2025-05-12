@@ -78,6 +78,11 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 630, -1, -1));
 
         jButton5.setText("Quản Lý Hóa Đơn");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 630, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tải xuống2.jpg"))); // NOI18N
@@ -157,6 +162,13 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         myForm.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+       frm_Hoa_Don myForm = new frm_Hoa_Don();
+        myForm.setVisible(true);
+        myForm.setLocationRelativeTo(null);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

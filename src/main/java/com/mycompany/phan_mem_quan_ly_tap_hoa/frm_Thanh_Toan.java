@@ -4,6 +4,7 @@
  */
 package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
+import Backend.In_Hoa_Don;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-//private String filePath = "data/sanpham.csv";
+
 public class frm_Thanh_Toan extends javax.swing.JFrame {
 
     /**
@@ -34,60 +35,54 @@ public class frm_Thanh_Toan extends javax.swing.JFrame {
     }
 
     private void loadDataFromCSV() {
-    try (BufferedReader reader = new BufferedReader(
-            new InputStreamReader(new FileInputStream("data/sanpham.csv"), "UTF-8"))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream("data/sanpham.csv"), "UTF-8"))) {
 
-        String line;
-        DefaultTableModel model = (DefaultTableModel) tblTatCa.getModel();
-        model.setRowCount(0);  // Làm sạch bảng trước khi thêm dữ liệu mới
+            String line;
+            DefaultTableModel model = (DefaultTableModel) tblTatCa.getModel();
+            model.setRowCount(0);  // Làm sạch bảng trước khi thêm dữ liệu mới
 
-        while ((line = reader.readLine()) != null) {
-            String[] data = line.split(",");
-            model.addRow(data); // Thêm dữ liệu vào bảng
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                model.addRow(data); // Thêm dữ liệu vào bảng
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi đọc file CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Lỗi khi đọc file CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-}
-    private void saveInvoiceToCSV() {
-    // Lấy dữ liệu từ bảng hóa đơn
-    DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+        private void saveInvoiceToCSV() {
+         DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+        String filename = "data/hoadon.csv";
 
-    // Đường dẫn tới file hóa đơn chung (file đã tồn tại)
-    String filename = "data/hoadon.csv";
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String maHoaDon = "HD" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
-    // Lấy thời gian hiện tại để thêm vào đầu file
-    String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        try (BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(filename, true), "UTF-8"))) {
 
-    try (BufferedWriter writer = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(filename, true), "UTF-8"))) { // true để append dữ liệu vào cuối file
-
-        // Kiểm tra xem file có tồn tại và nếu không thì ghi tiêu đề cột
-        File file = new File(filename);
-        if (file.length() == 0) {
-            // Ghi tiêu đề cột nếu file rỗng (lần đầu tiên ghi vào file)
-            writer.write("Ngày giờ xuất hóa đơn,Mã món,Tên món,Giá tiền,Số lượng,Thành tiền");
-            writer.newLine();
-        }
-
-        // Duyệt qua từng hàng trong bảng hóa đơn và ghi vào file CSV
-        for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
-            String maMon = modelHoaDon.getValueAt(i, 0).toString();
-            String tenMon = modelHoaDon.getValueAt(i, 1).toString();
-            String giaTien = modelHoaDon.getValueAt(i, 2).toString();
-            String soLuong = modelHoaDon.getValueAt(i, 3).toString();
-            String thanhTien = modelHoaDon.getValueAt(i, 4).toString();            
-                writer.write(currentTime + "," + maMon + "," + tenMon + "," + giaTien + "," + soLuong + "," + thanhTien);
+            File file = new File(filename);
+            if (file.length() == 0) {
+                writer.write("Mã hóa đơn,Ngày giờ,Mã món,Tên món,Giá tiền,Số lượng,Thành tiền");
                 writer.newLine();
-            
+            }
+
+            for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
+                String maMon = modelHoaDon.getValueAt(i, 0).toString();
+                String tenMon = modelHoaDon.getValueAt(i, 1).toString();
+                String giaTien = modelHoaDon.getValueAt(i, 2).toString();
+                String soLuong = modelHoaDon.getValueAt(i, 3).toString();
+                String thanhTien = modelHoaDon.getValueAt(i, 4).toString();
+
+                writer.write(maHoaDon + "," + currentTime + "," + maMon + "," + tenMon + "," + giaTien + "," + soLuong + "," + thanhTien);
+                writer.newLine();
+            }
+
+            JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu thành công vào file!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn vào file CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
-        JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu thành công vào file chung!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn vào file CSV", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
 }
 
 
@@ -565,70 +560,77 @@ public class frm_Thanh_Toan extends javax.swing.JFrame {
 }
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-            if (jComboBoxphuongThucThanhToan.getSelectedIndex() == -1) {
-    JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-    return;
-}
-
-String phuongThuc = jComboBoxphuongThucThanhToan.getSelectedItem().toString();
-
-// Nếu phương thức thanh toán là "Chuyển khoản"
-if (phuongThuc.equalsIgnoreCase("Chuyển khoản")) {
-    int tongTien = 0;
-    try {
-        tongTien = Integer.parseInt(txtTongTien.getText().trim()); // Lấy tiền từ ô txtTongTien
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Không thể lấy tổng tiền!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        // Kiểm tra phương thức thanh toán
+    if (jComboBoxphuongThucThanhToan.getSelectedIndex() == -1) {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán!", "Lỗi", JOptionPane.WARNING_MESSAGE);
         return;
     }
+    
 
-    String noiDung = "Thanh Toan " + System.currentTimeMillis();
-
-    // Tạo form QRCodeViewer và hiển thị mã QR
-    QRCodeViewer qrViewer = new QRCodeViewer(tongTien, noiDung, new QRCodeViewer.QRPaymentCallback() {
-        @Override
-        public void onPaymentCompleted() {
-            xuLyThanhToanSauKhiChuyenKhoan();
+    String phuongThuc = jComboBoxphuongThucThanhToan.getSelectedItem().toString();
+    
+    // Nếu phương thức thanh toán là "Chuyển khoản"
+    if (phuongThuc.equalsIgnoreCase("Chuyển khoản")) {
+        int tongTien = 0;
+        try {
+            tongTien = Integer.parseInt(txtTongTien.getText().trim()); // Lấy tiền từ ô txtTongTien
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Không thể lấy tổng tiền!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    });
-}
 
-// Tiếp tục xử lý thanh toán cho các phương thức khác (ví dụ như "Tiền mặt")
-DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
-DefaultTableModel modelTatCa = (DefaultTableModel) tblTatCa.getModel();
+        String noiDung = "Thanh Toan " + System.currentTimeMillis();
 
-for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
-    String maMon = modelHoaDon.getValueAt(i, 0).toString();
-    int soLuong = Integer.parseInt(modelHoaDon.getValueAt(i, 3).toString());
-
-    for (int j = 0; j < modelTatCa.getRowCount(); j++) {
-        String maMonTrongBang = modelTatCa.getValueAt(j, 0).toString();
-        int soLuongTrongBang = Integer.parseInt(modelTatCa.getValueAt(j, 4).toString());
-
-        if (maMon.equals(maMonTrongBang)) {
-            int soLuongMoi = soLuongTrongBang - soLuong;
-            if (soLuongMoi <= 0) {
-                modelTatCa.removeRow(j);
-                j--;
-            } else {
-                modelTatCa.setValueAt(soLuongMoi, j, 4);
+        // Tạo form QRCodeViewer và hiển thị mã QR
+        QRCodeViewer qrViewer = new QRCodeViewer(tongTien, noiDung, new QRCodeViewer.QRPaymentCallback() {
+            @Override
+            public void onPaymentCompleted() {
+                xuLyThanhToanSauKhiChuyenKhoan();  // Gọi phương thức xử lý thanh toán khi chuyển khoản hoàn tất
             }
-            break;
+        });
+        qrViewer.show();  // Hiển thị QRCodeViewer
+    }
+
+    // Cập nhật thông tin trong giỏ hàng
+    DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+    DefaultTableModel modelTatCa = (DefaultTableModel) tblTatCa.getModel();
+
+    for (int i = 0; i < modelHoaDon.getRowCount(); i++) {
+        String maMon = modelHoaDon.getValueAt(i, 0).toString();
+        int soLuong = Integer.parseInt(modelHoaDon.getValueAt(i, 3).toString());
+
+        for (int j = 0; j < modelTatCa.getRowCount(); j++) {
+            String maMonTrongBang = modelTatCa.getValueAt(j, 0).toString();
+            int soLuongTrongBang = Integer.parseInt(modelTatCa.getValueAt(j, 4).toString());
+
+            if (maMon.equals(maMonTrongBang)) {
+                int soLuongMoi = soLuongTrongBang - soLuong;
+                if (soLuongMoi <= 0) {
+                    modelTatCa.removeRow(j);
+                    j--;
+                } else {
+                    modelTatCa.setValueAt(soLuongMoi, j, 4);
+                }
+                break;
+            }
         }
     }
-}
 
-// Cập nhật file CSV
-updateCSVFile(modelTatCa);
+    // Cập nhật file CSV
+    
+    updateCSVFile(modelTatCa);
 
-// Chỉ hiển thị thông báo "Thanh toán thành công!" nếu phương thức thanh toán là "Tiền mặt"
-if (phuongThuc.equalsIgnoreCase("Tiền mặt")) {
-    JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-     saveInvoiceToCSV();
-}
-;
-modelHoaDon.setRowCount(0); // Xóa giỏ hàng
-updateTotalAmount(); // Cập nhật lại tổng tiền
+    // Chỉ hiển thị thông báo "Thanh toán thành công!" nếu phương thức thanh toán là "Tiền mặt"
+    if (phuongThuc.equalsIgnoreCase("Tiền mặt")) {
+        JOptionPane.showMessageDialog(this, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        saveInvoiceToCSV();
+
+        
+
+    // Xóa giỏ hàng và cập nhật lại tổng tiền
+    modelHoaDon.setRowCount(0);  // Xóa giỏ hàng
+    updateTotalAmount();  // Cập nhật lại tổng tiền
+    }
     }//GEN-LAST:event_btnThanhToanActionPerformed
     private void xuLyThanhToanSauKhiChuyenKhoan() {
     DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
@@ -678,45 +680,6 @@ updateTotalAmount(); // Cập nhật lại tổng tiền
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new frm_Thanh_Toan().setVisible(true);
