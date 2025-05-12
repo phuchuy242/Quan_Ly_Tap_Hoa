@@ -59,9 +59,9 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 400, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 400, -1, -1));
 
-        jButton3.setText("Quản Lý Hóa Đơn");
+        jButton3.setText("Thanh Toán");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -77,12 +77,12 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 630, -1, -1));
 
-        jButton5.setText("Quản Lý");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 630, -1, -1));
+        jButton5.setText("Quản Lý Hóa Đơn");
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 630, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tải xuống2.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 210, 170));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 200, 170));
 
         jButton6.setText("Nhà Cung Cấp");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -94,7 +94,7 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/images.11jpg.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 190, 170));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, 200, 170));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tải xuống4.jpg"))); // NOI18N
         jLabel3.setText("jLabel3");
@@ -138,7 +138,7 @@ public class frm_Trang_Chu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        frm_Hoa_Don myForm = new frm_Hoa_Don();
+        frm_Thanh_Toan myForm = new frm_Thanh_Toan();
         myForm.setVisible(true);
         myForm.setLocationRelativeTo(null);
         this.setVisible(false); 

@@ -22,12 +22,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 //private String filePath = "data/sanpham.csv";
-public class frm_Hoa_Don extends javax.swing.JFrame {
+public class frm_Thanh_Toan extends javax.swing.JFrame {
 
     /**
      * Creates new form frm_Hoa_Don
      */
-    public frm_Hoa_Don() {
+    public frm_Thanh_Toan() {
         initComponents();
         setLocationRelativeTo(this);
         loadDataFromCSV();
@@ -77,14 +77,10 @@ public class frm_Hoa_Don extends javax.swing.JFrame {
             String tenMon = modelHoaDon.getValueAt(i, 1).toString();
             String giaTien = modelHoaDon.getValueAt(i, 2).toString();
             String soLuong = modelHoaDon.getValueAt(i, 3).toString();
-            String thanhTien = modelHoaDon.getValueAt(i, 4).toString();
-
-            // Chỉ lưu những dòng có sản phẩm hợp lệ (ví dụ: Pepsi và Nước rửa chén)
-            if (tenMon.equalsIgnoreCase("Pepsi") || tenMon.equalsIgnoreCase("Nước rửa chén")) {
-                // Ghi thông tin sản phẩm vào file CSV
+            String thanhTien = modelHoaDon.getValueAt(i, 4).toString();            
                 writer.write(currentTime + "," + maMon + "," + tenMon + "," + giaTien + "," + soLuong + "," + thanhTien);
                 writer.newLine();
-            }
+            
         }
 
         JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu thành công vào file chung!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -695,14 +691,22 @@ updateTotalAmount(); // Cập nhật lại tổng tiền
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frm_Hoa_Don.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frm_Hoa_Don.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frm_Hoa_Don.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frm_Hoa_Don.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frm_Thanh_Toan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -715,7 +719,7 @@ updateTotalAmount(); // Cập nhật lại tổng tiền
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frm_Hoa_Don().setVisible(true);
+                new frm_Thanh_Toan().setVisible(true);
             }
         });
     }
