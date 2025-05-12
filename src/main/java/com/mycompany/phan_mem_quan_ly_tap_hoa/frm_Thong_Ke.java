@@ -1,14 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -38,6 +36,7 @@ private void docDuLieuTuFile(String tenFile) {
     public frm_Thong_Ke() {
         initComponents();
         docDuLieuTuFile("data/hoadon.csv");
+        hienThiTatCaHoaDon();
     }
 
     /**
@@ -61,7 +60,7 @@ private void docDuLieuTuFile(String tenFile) {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ngày", "Sản phẩm" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ngày", "Tháng", "Sản phẩm" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -169,20 +168,24 @@ private void docDuLieuTuFile(String tenFile) {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         String loaiTim = jComboBox1.getSelectedItem().toString();
+    String loaiTim = jComboBox1.getSelectedItem().toString();
     String giaTriTim = jTextField1.getText().trim();
 
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0); // Xoá bảng cũ
+    model.setRowCount(0); // Xóa bảng cũ
 
     for (String[] dong : dsHoaDon) {
-        String ngay = dong[0].split(" ")[0]; // chỉ lấy ngày
+        String ngay = dong[0].split(" ")[0];
+        String[] tachNgay = ngay.split("/");
         String sanPham = dong[2];
         String soLuong = dong[4];
         String doanhThu = dong[5];
 
         boolean hopLe = false;
+
         if (loaiTim.equals("Ngày") && ngay.contains(giaTriTim)) {
+            hopLe = true;
+        } else if (loaiTim.equals("Tháng") && tachNgay.length >= 2 && tachNgay[1].equals(giaTriTim)) {
             hopLe = true;
         } else if (loaiTim.equals("Sản phẩm") && sanPham.toLowerCase().contains(giaTriTim.toLowerCase())) {
             hopLe = true;
@@ -205,6 +208,7 @@ private void docDuLieuTuFile(String tenFile) {
     private void tinhTongDoanhThu() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int tong = 0;
+
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
                 tong += Integer.parseInt(model.getValueAt(i, 3).toString());
@@ -212,8 +216,25 @@ private void docDuLieuTuFile(String tenFile) {
                 // Bỏ qua nếu lỗi
             }
         }
-        jLabel1.setText("Tổng doanh thu: " + tong + " VNĐ");
+
+        // Định dạng tiền tệ Việt Nam
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        jLabel1.setText("Tổng doanh thu: " + formatter.format(tong) + " VNĐ");
     }
+    private void hienThiTatCaHoaDon() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+        for (String[] dong : dsHoaDon) {
+            String ngay = dong[0].split(" ")[0];
+            String sanPham = dong[2];
+            String soLuong = dong[4];
+            String doanhThu = dong[5];
+            model.addRow(new Object[]{ngay, sanPham, soLuong, doanhThu});
+        }
+
+        tinhTongDoanhThu(); // Cập nhật tổng doanh thu
+}
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
