@@ -21,6 +21,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 
 public class frm_Thanh_Toan extends javax.swing.JFrame {
@@ -28,6 +31,7 @@ public class frm_Thanh_Toan extends javax.swing.JFrame {
     /**
      * Creates new form frm_Hoa_Don
      */
+    
     public frm_Thanh_Toan() {
         initComponents();
         setLocationRelativeTo(this);
@@ -55,8 +59,10 @@ public class frm_Thanh_Toan extends javax.swing.JFrame {
          DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
         String filename = "data/hoadon.csv";
 
-        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        String maHoaDon = "HD" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String currentTime = new SimpleDateFormat(""
+                + "MM/dd/yyyy HH:mm:ss").format(new Date());
+
+        String maHoaDon = "HD" + new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
 
         try (BufferedWriter writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(filename, true), "UTF-8"))) {

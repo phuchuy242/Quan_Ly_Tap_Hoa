@@ -1,8 +1,11 @@
 package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,18 +23,17 @@ public class frm_Thong_Ke extends javax.swing.JFrame {
 
 private void docDuLieuTuFile(String tenFile) {
     dsHoaDon.clear();
-    try (BufferedReader br = new BufferedReader(new FileReader(tenFile))) {
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(","); // Sửa ở đây từ "\t" thành ","
-            if (parts.length >= 6) {
-                dsHoaDon.add(parts);
-            }
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(tenFile), StandardCharsets.UTF_8))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+        String[] parts = line.split(","); 
+        if (parts.length >= 6) {
+            dsHoaDon.add(parts);
         }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Lỗi đọc file: " + e.getMessage());
     }
-}
+} catch (IOException e) {
+    JOptionPane.showMessageDialog(this, "Lỗi đọc file: " + e.getMessage());
+}}
 
     public frm_Thong_Ke() {
         initComponents();
@@ -60,7 +62,7 @@ private void docDuLieuTuFile(String tenFile) {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ngày", "Tháng", "Sản phẩm" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ngày", "Sản phẩm" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -175,26 +177,35 @@ private void docDuLieuTuFile(String tenFile) {
     model.setRowCount(0); // Xóa bảng cũ
 
     for (String[] dong : dsHoaDon) {
-        String ngay = dong[0].split(" ")[0];
-        String[] tachNgay = ngay.split("/");
-        String sanPham = dong[2];
-        String soLuong = dong[4];
-        String doanhThu = dong[5];
+    String ngayGio = dong[1];
+    String ngayPhanLy = "";
 
-        boolean hopLe = false;
-
-        if (loaiTim.equals("Ngày") && ngay.contains(giaTriTim)) {
-            hopLe = true;
-        } else if (loaiTim.equals("Tháng") && tachNgay.length >= 2 && tachNgay[1].equals(giaTriTim)) {
-            hopLe = true;
-        } else if (loaiTim.equals("Sản phẩm") && sanPham.toLowerCase().contains(giaTriTim.toLowerCase())) {
-            hopLe = true;
-        }
-
-        if (hopLe) {
-            model.addRow(new Object[]{ngay, sanPham, soLuong, doanhThu});
-        }
+    if (ngayGio.contains(" ")) {
+        ngayPhanLy = ngayGio.split(" ")[0];
+    } else {
+        ngayPhanLy = ngayGio;
     }
+
+    String[] tachNgay = ngayPhanLy.split("[/-]"); // tách ngày theo / hoặc -
+
+    String sanPham = dong[3];
+    String soLuong = dong[4];
+    String doanhThu = dong[6];
+
+    boolean hopLe = false;
+
+    if (loaiTim.equals("Ngày") && ngayPhanLy.contains(giaTriTim)) {
+        hopLe = true;
+    } else if (loaiTim.equals("Tháng") && tachNgay.length >= 2 && tachNgay[1].equals(giaTriTim)) {
+        hopLe = true;
+    } else if (loaiTim.equals("Sản phẩm") && sanPham.toLowerCase().contains(giaTriTim.toLowerCase())) {
+        hopLe = true;
+    }
+
+    if (hopLe) {
+        model.addRow(new Object[]{ngayGio, sanPham, soLuong, doanhThu});
+    }
+}
 
     tinhTongDoanhThu(); // Cập nhật tổng doanh thu
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -222,18 +233,18 @@ private void docDuLieuTuFile(String tenFile) {
         jLabel1.setText("Tổng doanh thu: " + formatter.format(tong) + " VNĐ");
     }
     private void hienThiTatCaHoaDon() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // Xóa dữ liệu cũ
 
-        for (String[] dong : dsHoaDon) {
-            String ngay = dong[0].split(" ")[0];
-            String sanPham = dong[2];
-            String soLuong = dong[4];
-            String doanhThu = dong[5];
-            model.addRow(new Object[]{ngay, sanPham, soLuong, doanhThu});
-        }
+    for (String[] dong : dsHoaDon) {
+        String ngay = dong[1];           // lấy nguyên ngày giờ
+        String sanPham = dong[3];
+        String soLuong = dong[5];
+        String doanhThu = dong[6];
+        model.addRow(new Object[]{ngay, sanPham, soLuong, doanhThu});
+    }
 
-        tinhTongDoanhThu(); // Cập nhật tổng doanh thu
+    tinhTongDoanhThu(); // Cập nhật tổng doanh thu
 }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -257,6 +268,7 @@ private void docDuLieuTuFile(String tenFile) {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(frm_Thong_Ke.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

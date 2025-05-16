@@ -107,7 +107,7 @@ public class QRCodeViewer extends JFrame {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             // Lấy thời gian hiện tại
-            String thoiGian = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            String thoiGian = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
 
             // Ghi vào file CSV với thứ tự: thời gian, số tiền, nội dung
             writer.append(thoiGian + "," + donGia + "," + noiDung); // Ghi thời gian, số tiền, nội dung
