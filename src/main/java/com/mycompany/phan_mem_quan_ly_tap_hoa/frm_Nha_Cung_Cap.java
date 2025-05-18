@@ -3,9 +3,14 @@ package com.mycompany.phan_mem_quan_ly_tap_hoa;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -25,14 +30,16 @@ public class frm_Nha_Cung_Cap extends javax.swing.JFrame {
         loadTableFromCSV("data/nhacungcap.csv");
 
     }
-     private void saveTableToCSV(DefaultTableModel model, String filePath) throws IOException {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+    private void saveTableToCSV(DefaultTableModel model, String filePath) throws IOException {
+    try (BufferedWriter bw = new BufferedWriter(
+            new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
+
         for (int i = 0; i < model.getRowCount(); i++) {
             for (int j = 0; j < model.getColumnCount(); j++) {
-                bw.write(model.getValueAt(i, j).toString());
-                if (j < model.getColumnCount() - 1) {
-                    bw.write(",");
-                }
+                Object value = model.getValueAt(i, j);
+                bw.write(value == null ? "" : value.toString());
+
+                if (j < model.getColumnCount() - 1) bw.write(",");
             }
             bw.newLine();
         }
@@ -42,10 +49,17 @@ public class frm_Nha_Cung_Cap extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0);
 
-    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    try (BufferedReader br = new BufferedReader(
+            new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+
         String line;
         while ((line = br.readLine()) != null) {
-            String[] data = line.split(",");
+            // Xử lý BOM nếu file được tạo bởi Excel/Notepad
+            if (!line.isEmpty() && line.charAt(0) == '\uFEFF') {
+                line = line.substring(1);
+            }
+
+            String[] data = line.split(",", -1); // giữ ô trống
             model.addRow(data);
         }
     } catch (IOException e) {
